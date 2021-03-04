@@ -75,7 +75,9 @@ namespace OTC.Employees.Test.Data
 		private static void CreateTrigger(string connString)
 		{
 			var cmd_upd =
-				"CREATE TRIGGER Salary_Update ON Employees AFTER INSERT, UPDATE AS UPDATE Departments SET Salary = (SELECT AVG(e.Salary) FROM Employees AS e WHERE e.DepartmentId = (SELECT DepartmentId FROM inserted)) WHERE Id = (SELECT DepartmentId FROM inserted)";
+				"CREATE TRIGGER Salary_Update ON Employees AFTER UPDATE AS UPDATE Departments SET Salary = (SELECT AVG(e.Salary) FROM Employees AS e WHERE e.DepartmentId = Departments.Id) WHERE Id = (SELECT DepartmentId FROM inserted) OR Id = (SELECT DepartmentId FROM deleted)";
+			var cmd_ins =
+				"CREATE TRIGGER Salary_Insert ON Employees AFTER INSERT AS UPDATE Departments SET Salary = (SELECT AVG(e.Salary) FROM Employees AS e WHERE e.DepartmentId = (SELECT DepartmentId FROM inserted)) WHERE Id = (SELECT DepartmentId FROM inserted)";
 			var cmd_del =
 				"CREATE TRIGGER Salary_Delete ON Employees AFTER DELETE AS UPDATE Departments SET Salary = (SELECT AVG(e.Salary) FROM Employees AS e WHERE e.DepartmentId = (SELECT DepartmentId FROM deleted)) WHERE Id = (SELECT TOP 1 DepartmentId FROM deleted)";
 
@@ -83,8 +85,10 @@ namespace OTC.Employees.Test.Data
 			connection.Open();
 			var commandUpd = new SqlCommand(cmd_upd, connection);
 			var commandDel = new SqlCommand(cmd_del, connection);
+			var commanIns = new SqlCommand(cmd_ins, connection);
 			commandUpd.ExecuteNonQuery();
 			commandDel.ExecuteNonQuery();
+			commanIns.ExecuteNonQuery();
 		}
 	}
 }

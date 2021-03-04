@@ -6,7 +6,7 @@ using OTC.Employees.Test.Models;
 
 namespace OTC.Employees.Test.Data
 {
-	public class BaseRepository<T> : IDisposable, IRepository<T> where T : DbEntry
+	public abstract class BaseRepository<T> : IDisposable, IRepository<T> where T : DbEntry
 	{
 		private readonly DbSet<T> _table;
 
@@ -50,10 +50,7 @@ namespace OTC.Employees.Test.Data
 			return await _table.FindAsync(id);
 		}
 
-		public virtual async Task<List<T>> GetAll()
-		{
-			return await _table.ToListAsync();
-		}
+		public abstract Task<List<T>> GetAll();
 
 		public virtual async Task<bool> IsExists(T entity)
 		{
