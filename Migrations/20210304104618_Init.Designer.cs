@@ -9,7 +9,7 @@ using OTC.Employees.Test.Data;
 namespace OTC.Employees.Test.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20210303182701_Init")]
+    [Migration("20210304104618_Init")]
     partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -57,7 +57,7 @@ namespace OTC.Employees.Test.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal>("Salary")
-                        .HasColumnType("decimal(8,2)");
+                        .HasColumnType("decimal(11,2)");
 
                     b.HasKey("Id");
 
