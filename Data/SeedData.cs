@@ -85,10 +85,10 @@ namespace OTC.Employees.Test.Data
 			connection.Open();
 			var commandUpd = new SqlCommand(cmd_upd, connection);
 			var commandDel = new SqlCommand(cmd_del, connection);
-			var commanIns = new SqlCommand(cmd_ins, connection);
+			var commandIns = new SqlCommand(cmd_ins, connection);
 			commandUpd.ExecuteNonQuery();
 			commandDel.ExecuteNonQuery();
-			commanIns.ExecuteNonQuery();
+			commandIns.ExecuteNonQuery();
 		}
 	}
 }

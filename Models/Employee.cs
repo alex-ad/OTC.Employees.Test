@@ -11,10 +11,10 @@ namespace OTC.Employees.Test.Models
 		[DisplayName("ФИО")]
 		public string Name { get; set; }
 
-		[Range(1, double.MaxValue, ErrorMessage = "Введите положительное число больше 0")]
+		[Range(1, 999_999_999, ErrorMessage = "Введите положительное число больше от 0 до 999 999 999")]
 		[DefaultValue(1)]
 		[Required]
-		[Column(TypeName = "decimal(8, 2)")]
+		[Column(TypeName = "decimal(11, 2)")]
 		[DisplayName("Зарплата")]
 		public double Salary { get; set; }
 
