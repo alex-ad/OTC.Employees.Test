@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using OTC.Employees.Test.Data;
@@ -20,13 +21,13 @@ namespace OTC.Employees.Test.Controllers
 		[HttpGet]
 		public async Task<ActionResult<IEnumerable<Department>>> GetDepartments()
 		{
-			return await _departmentRepo.GetAll();
+			return await _departmentRepo.GetAll(orderBy: q => q.OrderBy(d => d.Name), includeProperties: "Employees");
 		}
 
 		[HttpGet("id/{id}")]
 		public async Task<ActionResult<Department>> GetDepartmentById(int id)
 		{
-			var dept = await _departmentRepo.GetOne(id);
+			var dept = await _departmentRepo.GetOne(id, "Employees");
 			return dept is null ? BadRequest() : dept;
 		}
 

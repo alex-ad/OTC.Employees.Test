@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace OTC.Employees.Test.Data
@@ -8,8 +10,8 @@ namespace OTC.Employees.Test.Data
 		Task Update(T entity);
 		Task Add(T entity);
 		Task<bool> TryDelete(int? id);
-		Task<T> GetOne(int? id);
-		Task<List<T>> GetAll();
+		Task<T> GetOne(int? id, string includeProperties = "");
+		Task<List<T>> GetAll(Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null, string includeProperties = "");
 		Task<bool> IsExists(T entity);
 		Task Save(T entity);
 	}

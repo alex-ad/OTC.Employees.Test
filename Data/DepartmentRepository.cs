@@ -27,19 +27,6 @@ namespace OTC.Employees.Test.Data
 			await base.Update(e);
 		}
 
-		public override async Task<Department> GetOne(int? id)
-		{
-			return await Context.Departments.Include(x => x.Employees).FirstOrDefaultAsync(x => x.Id == id);
-		}
-
-		public override async Task<List<Department>> GetAll()
-		{
-			return await Context.Departments
-				.Include(x => x.Employees)
-				.OrderBy(x => x.Name)
-				.ToListAsync();
-		}
-
 		public override async Task<bool> IsExists(Department department)
 		{
 			return await Context.Departments.FirstOrDefaultAsync(x =>

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using OTC.Employees.Test.Models;
@@ -45,14 +46,26 @@ namespace OTC.Employees.Test.Data
 			await Save(entity);
 		}
 
-		public virtual async Task<T> GetOne(int? id)
+		public async Task<T> GetOne(int? id, string includeProperties = "")
 		{
-			return await _table.FindAsync(id);
+			IQueryable<T> query = _table;
+			foreach ( var includeProperty in includeProperties.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries) )
+			{
+				query = query.Include(includeProperty);
+			}
+
+			return await query.FirstOrDefaultAsync(x => x.Id == id);
 		}
 
-		public virtual async Task<List<T>> GetAll()
+		public async Task<List<T>> GetAll(Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null, string includeProperties = "")
 		{
-			return await _table.ToListAsync();
+			IQueryable<T> query = _table;
+			foreach (var includeProperty in includeProperties.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries) )
+			{
+				query = query.Include(includeProperty);
+			}
+
+			return orderBy != null ? await orderBy(query).ToListAsync() : await query.ToListAsync();
 		}
 
 		public virtual async Task<bool> IsExists(T entity)

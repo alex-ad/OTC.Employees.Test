@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -44,7 +45,7 @@ namespace OTC.Employees.Test.Controllers
 		[HttpGet]
 		public async Task<IActionResult> DepartmentsList()
 		{
-			return View(await _departmentRepo.GetAll());
+			return View(await _departmentRepo.GetAll(orderBy: q => q.OrderBy(d => d.Name), includeProperties: "Employees"));
 		}
 
 		[HttpGet]
@@ -52,7 +53,7 @@ namespace OTC.Employees.Test.Controllers
 		{
 			if (id == 0) return View(new Department());
 
-			var dept = await _departmentRepo.GetOne(id);
+			var dept = await _departmentRepo.GetOne(id, "Employees");
 			return dept is null ? BadRequest() : View(dept);
 		}
 
@@ -81,7 +82,7 @@ namespace OTC.Employees.Test.Controllers
 		[HttpGet]
 		public async Task<IActionResult> DepartmentDetails(int? id)
 		{
-			var dept = await _departmentRepo.GetOne(id);
+			var dept = await _departmentRepo.GetOne(id, "Employees");
 			return dept is null ? BadRequest() : View(dept);
 		}
 
@@ -98,7 +99,7 @@ namespace OTC.Employees.Test.Controllers
 		[HttpGet]
 		public async Task<IActionResult> EmployeesList()
 		{
-			return View(await _employeeRepo.GetAll());
+			return View(await _employeeRepo.GetAll(orderBy: q => q.OrderBy(e => e.Name), includeProperties: "Department"));
 		}
 
 		[HttpGet]
@@ -110,7 +111,7 @@ namespace OTC.Employees.Test.Controllers
 		[HttpGet]
 		public async Task<IActionResult> EmployeeDetails(int? id)
 		{
-			var empl = await _employeeRepo.GetOne(id);
+			var empl = await _employeeRepo.GetOne(id, "Department");
 			return empl is null ? BadRequest() : View(empl);
 		}
 
@@ -125,7 +126,7 @@ namespace OTC.Employees.Test.Controllers
 			if (id == 0)
 				return View(new Employee());
 
-			var empl = await _employeeRepo.GetOne(id);
+			var empl = await _employeeRepo.GetOne(id, "Department");
 			return empl is null ? BadRequest() : View(empl);
 		}
 
